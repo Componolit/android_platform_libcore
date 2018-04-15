@@ -18,6 +18,7 @@
 
 #include <memory>
 #include <stdlib.h>
+#include <string.h>
 
 #include <android-base/logging.h>
 #include <nativehelper/JNIHelp.h>

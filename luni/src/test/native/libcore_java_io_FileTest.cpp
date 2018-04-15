@@ -52,6 +52,7 @@ extern "C" void Java_libcore_java_io_FileTest_nativeTestFilesWithSurrogatePairs(
   }
 }
 
+#ifndef __GENODE__
 extern "C" int Java_libcore_java_io_FileTest_installSeccompFilter(JNIEnv* , jclass /* clazz */) {
     struct sock_filter filter[] = {
         BPF_STMT(BPF_LD|BPF_W|BPF_ABS, offsetof(struct seccomp_data, nr)),
@@ -74,3 +75,4 @@ extern "C" int Java_libcore_java_io_FileTest_installSeccompFilter(JNIEnv* , jcla
 
     return ret = prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &prog);
 }
+#endif

@@ -27,6 +27,7 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <netinet/in.h>
 
 jobject sockaddrToInetAddress(JNIEnv* env, const sockaddr_storage& ss, jint* port) {
     // Convert IPv4-mapped IPv6 addresses to IPv4 addresses.

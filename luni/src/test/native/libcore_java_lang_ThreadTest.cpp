@@ -16,6 +16,7 @@
 
 #include <memory>
 #include <string>
+#include <string.h>
 
 #include <pthread.h>
 #include <sys/prctl.h>
