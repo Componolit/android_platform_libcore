@@ -907,10 +907,12 @@ struct IcuDataMap {
         FAIL_WITH_STRERROR("mmap");
     }
 
+#ifndef __GENODE__
     // Tell the kernel that accesses are likely to be random rather than sequential.
     if (madvise(data_, data_length_, MADV_RANDOM) == -1) {
         FAIL_WITH_STRERROR("madvise(MADV_RANDOM)");
     }
+#endif
 
     UErrorCode status = U_ZERO_ERROR;
 
