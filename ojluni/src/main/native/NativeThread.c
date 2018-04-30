@@ -48,6 +48,8 @@
   #include <signal.h>
   /* Also defined in net/bsd_close.c */
   #define INTERRUPT_SIGNAL SIGIO
+#elif __GENODE__
+  #include <pthread.h>
 #else
   #error "missing platform-specific definition here"
 #endif
@@ -69,6 +71,7 @@ static void  NativeThread_init(JNIEnv *env)
      * should somehow be unified, perhaps within the VM.
      */
 
+#ifndef __GENODE__
     sigset_t ss;
     struct sigaction sa, osa;
     sa.sa_handler = nullHandler;
@@ -76,6 +79,7 @@ static void  NativeThread_init(JNIEnv *env)
     sigemptyset(&sa.sa_mask);
     if (sigaction(INTERRUPT_SIGNAL, &sa, &osa) < 0)
         JNU_ThrowIOExceptionWithLastError(env, "sigaction");
+#endif
 }
 
 JNIEXPORT jlong JNICALL
@@ -94,6 +98,8 @@ NativeThread_signal(JNIEnv *env, jclass cl, jlong thread)
     int ret;
 #ifdef __solaris__
     ret = thr_kill((thread_t)thread, INTERRUPT_SIGNAL);
+#elif defined(__GENODE__)
+    ret = -1;
 #else
     ret = pthread_kill((pthread_t)thread, INTERRUPT_SIGNAL);
 #endif

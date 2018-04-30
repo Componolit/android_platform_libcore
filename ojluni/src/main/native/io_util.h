@@ -29,7 +29,7 @@
 extern jfieldID IO_fd_fdID;
 extern jfieldID IO_handle_fdID;
 
-#ifdef _ALLBSD_SOURCE
+#if defined (_ALLBSD_SOURCE) || defined(__GENODE__)
 #include <fcntl.h>
 #ifndef O_SYNC
 #define O_SYNC  O_FSYNC

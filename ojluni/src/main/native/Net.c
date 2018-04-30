@@ -60,7 +60,7 @@
 #define NATIVE_METHOD(className, functionName, signature) \
 { #functionName, signature, (void*)(Java_sun_nio_ch_ ## className ## _ ## functionName) }
 
-#if defined(_ALLBSD_SOURCE) || defined(_AIX)
+#if defined(_ALLBSD_SOURCE) || defined(_AIX) || defined(__GENODE__)
 
 #ifndef IP_BLOCK_SOURCE
 
@@ -562,7 +562,7 @@ Java_sun_nio_ch_Net_joinOrDrop4(JNIEnv *env, jobject this, jboolean join, jobjec
 #endif
 
 // Begin Android changed.
-#if defined(__GLIBC__)
+#if defined(__GLIBC__) || defined(__GENODE__)
         mreq_source.imr_multiaddr.s_addr = htonl(group);
         mreq_source.imr_sourceaddr.s_addr = htonl(source);
         mreq_source.imr_interface.s_addr = htonl(interf);
@@ -606,7 +606,7 @@ Java_sun_nio_ch_Net_blockOrUnblock4(JNIEnv *env, jobject this, jboolean block, j
     }
 #endif
 // Begin Android changed.
-#if defined(__GLIBC__)
+#if defined(__GLIBC__) || defined(__GENODE__)
         mreq_source.imr_multiaddr.s_addr = htonl(group);
         mreq_source.imr_sourceaddr.s_addr = htonl(source);
         mreq_source.imr_interface.s_addr = htonl(interf);

@@ -40,6 +40,7 @@ JNIEXPORT jboolean JNICALL
 Java_java_nio_MappedByteBuffer_isLoaded0(JNIEnv *env, jobject obj, jlong address,
                                          jlong len, jint numPages)
 {
+#ifndef __GENODE__
     jboolean loaded = JNI_TRUE;
     int result = 0;
     int i = 0;
@@ -70,6 +71,9 @@ Java_java_nio_MappedByteBuffer_isLoaded0(JNIEnv *env, jobject obj, jlong address
     }
     free(vec);
     return loaded;
+#else
+    return 1;
+#endif // __GENODE__
 }
 
 

@@ -137,7 +137,9 @@ FileDispatcherImpl_force0(JNIEnv *env, jobject this,
     int result = 0;
 
     if (md == JNI_FALSE) {
+#ifndef __GENODE__
         result = fdatasync(fd);
+#endif
     } else {
 #ifdef _AIX
         /* On AIX, calling fsync on a file descriptor that is opened only for

@@ -42,7 +42,7 @@
 #include <strings.h>
 #endif
 
-#if defined(__linux__) || defined(_AIX)
+#if defined(__linux__) || defined(_AIX) || defined(__GENODE__)
 #include <string.h>
 #endif
 

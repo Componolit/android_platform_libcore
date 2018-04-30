@@ -33,7 +33,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <limits.h>
-#if !defined(_ALLBSD_SOURCE)
+#if !defined(_ALLBSD_SOURCE) && !defined(__GENODE__)
 #include <alloca.h>
 #endif
 

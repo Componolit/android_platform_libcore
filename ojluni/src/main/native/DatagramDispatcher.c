@@ -108,6 +108,7 @@ Java_sun_nio_ch_DatagramDispatcher_write0(JNIEnv *env, jclass clazz,
     return convertReturnVal(env, result, JNI_FALSE);
 }
 
+#ifndef __GENODE__
 JNIEXPORT jlong JNICALL
 Java_sun_nio_ch_DatagramDispatcher_writev0(JNIEnv *env, jclass clazz,
                                        jobject fdo, jlong address, jint len)
@@ -138,12 +139,15 @@ Java_sun_nio_ch_DatagramDispatcher_writev0(JNIEnv *env, jclass clazz,
     }
     return convertLongReturnVal(env, (jlong)result, JNI_FALSE);
 }
+#endif // __GENODE__
 
 static JNINativeMethod gMethods[] = {
   NATIVE_METHOD(DatagramDispatcher, read0, "(Ljava/io/FileDescriptor;JI)I"),
   NATIVE_METHOD(DatagramDispatcher, readv0, "(Ljava/io/FileDescriptor;JI)J"),
   NATIVE_METHOD(DatagramDispatcher, write0, "(Ljava/io/FileDescriptor;JI)I"),
+#ifndef __GENODE__
   NATIVE_METHOD(DatagramDispatcher, writev0, "(Ljava/io/FileDescriptor;JI)J"),
+#endif // __GENODE__
 };
 
 void register_sun_nio_ch_DatagramDispatcher(JNIEnv* env) {
