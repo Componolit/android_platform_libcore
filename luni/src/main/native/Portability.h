@@ -17,10 +17,6 @@
 #ifndef PORTABILITY_H_included
 #define PORTABILITY_H_included
 
-#include <byteswap.h>
-#include <sys/sendfile.h>
-#include <sys/statvfs.h>
-
 #include <netdb.h>
 #if defined(__BIONIC__)
 extern "C" int android_getaddrinfofornet(const char*, const char*, const struct addrinfo*, unsigned, unsigned, struct addrinfo**);

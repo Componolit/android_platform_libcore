@@ -21,30 +21,16 @@
 #include <nativehelper/JniConstants.h>
 #include <nativehelper/ScopedLocalRef.h>
 
+#include <netinet/in.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 
 jobject sockaddrToInetAddress(JNIEnv* env, const sockaddr_storage& ss, jint* port) {
-    // Convert IPv4-mapped IPv6 addresses to IPv4 addresses.
-    // The RI states "Java will never return an IPv4-mapped address".
-    const sockaddr_in6& sin6 = reinterpret_cast<const sockaddr_in6&>(ss);
-    if (ss.ss_family == AF_INET6 && IN6_IS_ADDR_V4MAPPED(&sin6.sin6_addr)) {
-        // Copy the IPv6 address into the temporary sockaddr_storage.
-        sockaddr_storage tmp;
-        memset(&tmp, 0, sizeof(tmp));
-        memcpy(&tmp, &ss, sizeof(sockaddr_in6));
-        // Unmap it into an IPv4 address.
-        sockaddr_in& sin = reinterpret_cast<sockaddr_in&>(tmp);
-        sin.sin_family = AF_INET;
-        sin.sin_port = sin6.sin6_port;
-        memcpy(&sin.sin_addr.s_addr, &sin6.sin6_addr.s6_addr[12], 4);
-        // Do the regular conversion using the unmapped address.
-        return sockaddrToInetAddress(env, tmp, port);
-    }
 
     const void* rawAddress;
     size_t addressLength;
@@ -55,12 +41,6 @@ jobject sockaddrToInetAddress(JNIEnv* env, const sockaddr_storage& ss, jint* por
         rawAddress = &sin.sin_addr.s_addr;
         addressLength = 4;
         sin_port = ntohs(sin.sin_port);
-    } else if (ss.ss_family == AF_INET6) {
-        const sockaddr_in6& sin6 = reinterpret_cast<const sockaddr_in6&>(ss);
-        rawAddress = &sin6.sin6_addr.s6_addr;
-        addressLength = 16;
-        sin_port = ntohs(sin6.sin6_port);
-        scope_id = sin6.sin6_scope_id;
     } else {
         // We can't throw SocketException. We aren't meant to see bad addresses, so seeing one
         // really does imply an internal error.
@@ -115,7 +95,7 @@ static bool inetAddressToSockaddr(JNIEnv* env, jobject inetAddress, int port, so
     }
 
     // Check this is an address family we support.
-    if (ss.ss_family != AF_INET && ss.ss_family != AF_INET6) {
+    if (ss.ss_family != AF_INET) {
         jniThrowExceptionFmt(env, "java/lang/IllegalArgumentException",
                 "inetAddressToSockaddr bad family: %i", ss.ss_family);
         return false;
@@ -141,41 +121,10 @@ static bool inetAddressToSockaddr(JNIEnv* env, jobject inetAddress, int port, so
     // then unconditionally set sa_len to sizeof(sockaddr_storage) instead of having
     // to deal with this case by case.
 
-    // We use AF_INET6 sockets, so we want an IPv6 address (which may be a IPv4-mapped address).
-    sockaddr_in6& sin6 = reinterpret_cast<sockaddr_in6&>(ss);
-    sin6.sin6_port = htons(port);
-    if (ss.ss_family == AF_INET6) {
-        // IPv6 address. Copy the bytes...
-        jbyte* dst = reinterpret_cast<jbyte*>(&sin6.sin6_addr.s6_addr);
-        env->GetByteArrayRegion(addressBytes.get(), 0, 16, dst);
-        // ...and set the scope id...
-        static jfieldID holder6Fid = env->GetFieldID(JniConstants::inet6AddressClass,
-                                                     "holder6",
-                                                     "Ljava/net/Inet6Address$Inet6AddressHolder;");
-        if (holder6Fid == NULL) {
-            return false;
-        }
-        ScopedLocalRef<jobject> holder6(env, env->GetObjectField(inetAddress, holder6Fid));
-        static jfieldID scopeFid = env->GetFieldID(JniConstants::inet6AddressHolderClass, "scope_id", "I");
-        sin6.sin6_scope_id = env->GetIntField(holder6.get(), scopeFid);
-        sa_len = sizeof(sockaddr_in6);
-        return true;
-    }
 
     // Deal with Inet4Address instances.
     if (map) {
-        // We should represent this Inet4Address as an IPv4-mapped IPv6 sockaddr_in6.
-        // Change the family...
-        sin6.sin6_family = AF_INET6;
-        // Copy the bytes...
-        jbyte* dst = reinterpret_cast<jbyte*>(&sin6.sin6_addr.s6_addr[12]);
-        env->GetByteArrayRegion(addressBytes.get(), 0, 4, dst);
-        // INADDR_ANY and in6addr_any are both all-zeros...
-        if (!IN6_IS_ADDR_UNSPECIFIED(&sin6.sin6_addr)) {
-            // ...but all other IPv4-mapped addresses are ::ffff:a.b.c.d, so insert the ffff...
-            memset(&(sin6.sin6_addr.s6_addr[10]), 0xff, 2);
-        }
-        sa_len = sizeof(sockaddr_in6);
+        abort();
     } else {
         // We should represent this Inet4Address as an IPv4 sockaddr_in.
         sockaddr_in& sin = reinterpret_cast<sockaddr_in&>(ss);

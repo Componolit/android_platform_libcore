@@ -29,6 +29,9 @@
 #include "nativehelper/jni_macros.h"
 #include "Portability.h"
 
+#define bswap_16(x) __bswap16(x)
+#define bswap_32(x) __bswap32(x)
+
 // Use packed structures for access to unaligned data on targets with alignment restrictions.
 // The compiler will generate appropriate code to access these structures without
 // generating alignment exceptions.
