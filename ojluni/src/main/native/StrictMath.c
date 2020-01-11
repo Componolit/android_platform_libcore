@@ -24,7 +24,7 @@
  */
 
 #include "jni.h"
-#include "../../external/fdlibm/fdlibm.h"
+#include <fdlibm.h>
 
 #include <nativehelper/JNIHelp.h>
 
