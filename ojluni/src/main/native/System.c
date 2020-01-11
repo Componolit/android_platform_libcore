@@ -38,7 +38,7 @@
 #include "openssl/opensslv.h"
 #include "zlib.h"
 #include <nativehelper/JNIHelp.h>
-#if defined(__ANDROID__)
+#if defined(__ANDROID__) && !defined(__GENODE__)
 void android_get_LD_LIBRARY_PATH(char*, size_t);
 #endif
 
@@ -205,7 +205,7 @@ static jobjectArray System_specialProperties(JNIEnv* env, jclass ignored) {
 
 
     const char* library_path = getenv("LD_LIBRARY_PATH");
-#if defined(__ANDROID__)
+#if defined(__ANDROID__) && !defined(__GENODE__)
     if (library_path == NULL) {
         android_get_LD_LIBRARY_PATH(path, sizeof(path));
         library_path = path;
