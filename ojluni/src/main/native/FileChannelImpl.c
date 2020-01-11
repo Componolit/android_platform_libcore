@@ -49,8 +49,13 @@
 #include <sys/socket.h>
 #include <sys/uio.h>
 
+#ifndef lseek64
 #define lseek64 lseek
+#endif
+
+#ifndef mmap64
 #define mmap64 mmap
+#endif
 #endif
 
 static jfieldID chan_fd;        /* jobject 'fd' in sun.io.FileChannelImpl */
