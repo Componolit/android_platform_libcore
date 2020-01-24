@@ -170,7 +170,8 @@ System_mapLibraryName(JNIEnv *env, jclass ign, jstring libname)
     return (*env)->NewString(env, chars, len);
 }
 
-static jobjectArray System_specialProperties(JNIEnv* env, jclass ignored) {
+JNIEXPORT
+jobjectArray Java_java_lang_System_specialProperties(JNIEnv* env, jclass ignored) {
     jclass stringClass = (*env)->FindClass(env, "java/lang/String");
     jobjectArray result = (*env)->NewObjectArray(env, 4, stringClass, NULL);
 
@@ -267,7 +268,7 @@ static JNINativeMethod gMethods[] = {
   NATIVE_METHOD(System, setErr0, "(Ljava/io/PrintStream;)V"),
   NATIVE_METHOD(System, setOut0, "(Ljava/io/PrintStream;)V"),
   NATIVE_METHOD(System, setIn0, "(Ljava/io/InputStream;)V"),
-  NATIVE_METHOD(System, specialProperties, "()[Ljava/lang/String;"),
+  NATIVE_METHOD(Java_java_lang_System, specialProperties, "()[Ljava/lang/String;"),
   NATIVE_METHOD(System, log, "(CLjava/lang/String;Ljava/lang/Throwable;)V"),
   NATIVE_METHOD(System, currentTimeMillis, "()J"),
   NATIVE_METHOD(System, nanoTime, "()J"),
