@@ -231,7 +231,7 @@ jobjectArray Java_java_lang_System_specialProperties(JNIEnv* env, jclass ignored
     return result;
 }
 
-static void System_log(JNIEnv* env, jclass ignored, jchar type, jstring javaMessage, jthrowable exception) {
+void Java_java_lang_System_log(JNIEnv* env, jclass ignored, jchar type, jstring javaMessage, jthrowable exception) {
     int priority;
     switch (type) {
     case 'D': case 'd': priority = ANDROID_LOG_DEBUG;   break;
@@ -269,7 +269,7 @@ static JNINativeMethod gMethods[] = {
   NATIVE_METHOD(System, setOut0, "(Ljava/io/PrintStream;)V"),
   NATIVE_METHOD(System, setIn0, "(Ljava/io/InputStream;)V"),
   NATIVE_METHOD(Java_java_lang_System, specialProperties, "()[Ljava/lang/String;"),
-  NATIVE_METHOD(System, log, "(CLjava/lang/String;Ljava/lang/Throwable;)V"),
+  NATIVE_METHOD(Java_java_lang_System, log, "(CLjava/lang/String;Ljava/lang/Throwable;)V"),
   NATIVE_METHOD(System, currentTimeMillis, "()J"),
   NATIVE_METHOD(System, nanoTime, "()J"),
 };
