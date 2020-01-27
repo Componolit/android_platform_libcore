@@ -38,7 +38,7 @@
  * Find the double float corresponding to a given bit pattern
  */
 JNIEXPORT jdouble JNICALL
-Double_longBitsToDouble(JNIEnv *env, jclass unused, jlong v)
+Java_java_lang_Double_longBitsToDouble(JNIEnv *env, jclass unused, jlong v)
 {
     union {
         jlong l;
@@ -53,7 +53,7 @@ Double_longBitsToDouble(JNIEnv *env, jclass unused, jlong v)
  * Find the bit pattern corresponding to a given double float, NOT collapsing NaNs
  */
 JNIEXPORT jlong JNICALL
-Double_doubleToRawLongBits(JNIEnv *env, jclass unused, jdouble v)
+Java_java_lang_Double_doubleToRawLongBits(JNIEnv *env, jclass unused, jdouble v)
 {
     union {
         jlong l;
@@ -64,8 +64,8 @@ Double_doubleToRawLongBits(JNIEnv *env, jclass unused, jdouble v)
     return u.l;
 }
 static JNINativeMethod gMethods[] = {
-  NATIVE_METHOD(Double, longBitsToDouble, "(J)D"),
-  NATIVE_METHOD(Double, doubleToRawLongBits, "(D)J"),
+  NATIVE_METHOD(Java_java_lang_Double, longBitsToDouble, "(J)D"),
+  NATIVE_METHOD(Java_java_lang_Double, doubleToRawLongBits, "(D)J"),
 };
 
 void register_java_lang_Double(JNIEnv* env) {

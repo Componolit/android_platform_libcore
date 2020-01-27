@@ -253,13 +253,13 @@ void Java_java_lang_System_log(JNIEnv* env, jclass ignored, jchar type, jstring 
     }
 }
 
-static jlong System_nanoTime(JNIEnv* env, jclass unused) {
+jlong Java_java_lang_System_nanoTime(JNIEnv* env, jclass unused) {
   struct timespec now;
   clock_gettime(CLOCK_MONOTONIC, &now);
   return now.tv_sec * 1000000000LL + now.tv_nsec;
 }
 
-static jlong System_currentTimeMillis(JNIEnv* env, jclass unused) {
+jlong Java_java_lang_System_currentTimeMillis(JNIEnv* env, jclass unused) {
   return JVM_CurrentTimeMillis(NULL, NULL);
 }
 
@@ -270,8 +270,8 @@ static JNINativeMethod gMethods[] = {
   NATIVE_METHOD(System, setIn0, "(Ljava/io/InputStream;)V"),
   NATIVE_METHOD(Java_java_lang_System, specialProperties, "()[Ljava/lang/String;"),
   NATIVE_METHOD(Java_java_lang_System, log, "(CLjava/lang/String;Ljava/lang/Throwable;)V"),
-  NATIVE_METHOD(System, currentTimeMillis, "()J"),
-  NATIVE_METHOD(System, nanoTime, "()J"),
+  NATIVE_METHOD(Java_java_lang_System, currentTimeMillis, "()J"),
+  NATIVE_METHOD(Java_java_lang_System, nanoTime, "()J"),
 };
 
 void register_java_lang_System(JNIEnv* env) {

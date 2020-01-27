@@ -36,7 +36,7 @@
  * Find the float corresponding to a given bit pattern
  */
 JNIEXPORT jfloat JNICALL
-Float_intBitsToFloat(JNIEnv *env, jclass unused, jint v)
+Java_java_lang_Float_intBitsToFloat(JNIEnv *env, jclass unused, jint v)
 {
     union {
         int i;
@@ -50,7 +50,7 @@ Float_intBitsToFloat(JNIEnv *env, jclass unused, jint v)
  * Find the bit pattern corresponding to a given float, NOT collapsing NaNs
  */
 JNIEXPORT jint JNICALL
-Float_floatToRawIntBits(JNIEnv *env, jclass unused, jfloat v)
+Java_java_lang_Float_floatToRawIntBits(JNIEnv *env, jclass unused, jfloat v)
 {
     union {
         int i;
@@ -60,8 +60,8 @@ Float_floatToRawIntBits(JNIEnv *env, jclass unused, jfloat v)
     return (jint)u.i;
 }
 static JNINativeMethod gMethods[] = {
-  NATIVE_METHOD(Float, intBitsToFloat, "(I)F"),
-  NATIVE_METHOD(Float, floatToRawIntBits, "(F)I"),
+  NATIVE_METHOD(Java_java_lang_Float, intBitsToFloat, "(I)F"),
+  NATIVE_METHOD(Java_java_lang_Float, floatToRawIntBits, "(F)I"),
 };
 
 void register_java_lang_Float(JNIEnv* env) {
