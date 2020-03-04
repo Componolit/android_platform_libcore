@@ -29,6 +29,7 @@
 #include <time.h>
 
 #include <log/log.h>
+#include <stdio.h>
 
 #include "io_util.h"
 #include "jni.h"
@@ -232,6 +233,7 @@ jobjectArray Java_java_lang_System_specialProperties(JNIEnv* env, jclass ignored
 }
 
 void Java_java_lang_System_log(JNIEnv* env, jclass ignored, jchar type, jstring javaMessage, jthrowable exception) {
+    FILE *output;
     int priority;
     switch (type) {
     case 'D': case 'd': priority = ANDROID_LOG_DEBUG;   break;
@@ -245,7 +247,7 @@ void Java_java_lang_System_log(JNIEnv* env, jclass ignored, jchar type, jstring 
     }
 
     WITH_PLATFORM_STRING(env, javaMessage, message) {
-      LOG_PRI(priority, "System", "%s", message);
+      fprintf(stderr, "%s\n", message);
     } END_PLATFORM_STRING(env, message);
 
     if (exception != NULL) {
