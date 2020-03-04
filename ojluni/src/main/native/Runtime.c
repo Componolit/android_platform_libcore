@@ -62,19 +62,19 @@ Runtime_maxMemory(JNIEnv *env, jobject this)
 }
 
 JNIEXPORT void JNICALL
-Runtime_gc(JNIEnv *env, jobject this)
+Java_java_lang_Runtime_gc(JNIEnv *env, jobject this)
 {
     JVM_GC();
 }
 
 JNIEXPORT void JNICALL
-Runtime_nativeExit(JNIEnv *env, jclass this, jint status)
+Java_java_lang_Runtime_nativeExit(JNIEnv *env, jclass this, jint status)
 {
     JVM_Exit(status);
 }
 
 JNIEXPORT jstring JNICALL
-Runtime_nativeLoad(JNIEnv* env, jclass ignored, jstring javaFilename,
+Java_java_lang_Runtime_nativeLoad(JNIEnv* env, jclass ignored, jstring javaFilename,
                    jobject javaLoader)
 {
     return JVM_NativeLoad(env, javaFilename, javaLoader);
@@ -84,9 +84,9 @@ static JNINativeMethod gMethods[] = {
   FAST_NATIVE_METHOD(Runtime, freeMemory, "()J"),
   FAST_NATIVE_METHOD(Runtime, totalMemory, "()J"),
   FAST_NATIVE_METHOD(Runtime, maxMemory, "()J"),
-  NATIVE_METHOD(Runtime, gc, "()V"),
-  NATIVE_METHOD(Runtime, nativeExit, "(I)V"),
-  NATIVE_METHOD(Runtime, nativeLoad,
+  NATIVE_METHOD(Java_java_lang_Runtime, gc, "()V"),
+  NATIVE_METHOD(Java_java_lang_Runtime, nativeExit, "(I)V"),
+  NATIVE_METHOD(Java_java_lang_Runtime, nativeLoad,
                 "(Ljava/lang/String;Ljava/lang/ClassLoader;)"
                     "Ljava/lang/String;"),
 };
